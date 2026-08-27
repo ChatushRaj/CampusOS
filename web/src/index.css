@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --canvas: 150 12% 97%;
+    --surface: 0 0% 100%;
+    --ink: 200 16% 10%;
+    --ink-muted: 205 9% 40%;
+    --ink-subtle: 205 8% 56%;
+    --border: 200 12% 90%;
+    --input: 200 12% 88%;
+    --ring: 174 78% 24%;
+    --shadow: 200 30% 12%;
+
+    --primary: 174 78% 24%;
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 174 42% 94%;
+
+    --accent: 35 82% 46%;
+    --accent-foreground: 0 0% 100%;
+    --accent-soft: 38 88% 94%;
+
+    --danger: 5 66% 44%;
+    --danger-foreground: 0 0% 100%;
+    --danger-soft: 5 72% 96%;
+
+    --success: 152 52% 32%;
+    --success-soft: 152 44% 94%;
+
+    --kind-post: 174 78% 24%;
+    --kind-blog: 258 52% 50%;
+    --kind-notice: 5 66% 48%;
+    --kind-event: 35 82% 46%;
+    --kind-job: 212 62% 42%;
+    --kind-listing: 152 52% 32%;
+    --kind-poll: 288 44% 46%;
+  }
+
+  .dark {
+    --canvas: 200 18% 8%;
+    --surface: 200 16% 11%;
+    --ink: 180 8% 95%;
+    --ink-muted: 200 8% 66%;
+    --ink-subtle: 200 8% 52%;
+    --border: 200 12% 20%;
+    --input: 200 12% 24%;
+    --ring: 174 62% 46%;
+    --shadow: 200 60% 2%;
+
+    --primary: 174 62% 42%;
+    --primary-foreground: 200 30% 6%;
+    --primary-soft: 174 40% 16%;
+
+    --accent: 38 78% 56%;
+    --accent-foreground: 200 30% 6%;
+    --accent-soft: 38 40% 18%;
+
+    --danger: 5 68% 58%;
+    --danger-foreground: 200 30% 6%;
+    --danger-soft: 5 40% 18%;
+
+    --success: 152 44% 46%;
+    --success-soft: 152 30% 16%;
+
+    --kind-post: 174 62% 46%;
+    --kind-blog: 258 68% 70%;
+    --kind-notice: 5 72% 62%;
+    --kind-event: 38 78% 58%;
+    --kind-job: 212 72% 62%;
+    --kind-listing: 152 44% 50%;
+    --kind-poll: 288 56% 66%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+    font-feature-settings:
+      'cv05' 1,
+      'ss01' 1;
+  }
+
+  /* Focus is always visible and always the same shape. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-canvas rounded-sm;
+  }
+
+  ::selection {
+    @apply bg-primary-soft text-ink;
+  }
+
+  /* Honour the operating system preference rather than animating regardless. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* The signature device: a hairline spine that names the kind of thing you are reading. */
+  .spine {
+    @apply relative overflow-hidden;
+  }
+  .spine::before {
+    content: '';
+    @apply absolute left-0 top-0 h-full w-[3px];
+    background: currentColor;
+  }
+
+  .eyebrow {
+    @apply font-mono text-eyebrow uppercase text-ink-subtle;
+  }
+
+  /*
+   * Stagger: children enter in sequence rather than all at once, which reads as
+   * a list assembling itself instead of a page snapping into place. The index is
+   * set here with nth-child rather than inline styles, so any list can opt in by
+   * adding one class. The ramp is capped at the eighth row — beyond that a
+   * visitor is scrolling, not watching, and further delay would just feel slow.
+   */
+  .stagger > * {
+    animation: fade-up 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(40ms * var(--i, 0));
+  }
+  .stagger > *:nth-child(1) {
+    --i: 0;
+  }
+  .stagger > *:nth-child(2) {
+    --i: 1;
+  }
+  .stagger > *:nth-child(3) {
+    --i: 2;
+  }
+  .stagger > *:nth-child(4) {
+    --i: 3;
+  }
+  .stagger > *:nth-child(5) {
+    --i: 4;
+  }
+  .stagger > *:nth-child(6) {
+    --i: 5;
+  }
+  .stagger > *:nth-child(7) {
+    --i: 6;
+  }
+  .stagger > *:nth-child(8) {
+    --i: 7;
+  }
+  .stagger > *:nth-child(n + 9) {
+    --i: 8;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-border/50;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    background-image: linear-gradient(90deg, transparent, hsl(var(--surface) / 0.6), transparent);
+  }
+}

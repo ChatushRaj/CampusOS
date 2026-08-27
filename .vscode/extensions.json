@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "editorconfig.editorconfig",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-mysql",
+    "christian-kohler.path-intellisense",
+    "usernamehw.errorlens"
+  ]
+}

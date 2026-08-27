@@ -1,0 +1,14 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# Keep generated lockfiles out of diffs and out of language statistics.
+package-lock.json -diff linguist-generated
+*.sql linguist-language=SQL

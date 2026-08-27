@@ -1,0 +1,31 @@
+{
+  "name": "campusos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CampusOS \u2014 a unified community and administration platform for university campuses.",
+  "author": "Chatush Raj",
+  "license": "MIT",
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,web -c cyan,magenta \"npm run dev -w server\" \"npm run dev -w web\"",
+    "build": "npm run build -w server && npm run build -w web",
+    "start": "npm run start -w server",
+    "seed": "npm run seed -w server",
+    "lint": "npm run lint -w server && npm run lint -w web",
+    "typecheck": "npm run typecheck -w server && npm run typecheck -w web",
+    "test": "npm run test -w server",
+    "verify": "npm run format:check && npm run typecheck && npm run lint && npm test && npm run build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "prettier": "^3.4.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    name: Typecheck, lint, test, build
+    runs-on: ubuntu-latest
+
+    # A real database, so the schema is executed on every run rather than
+    # assumed to be valid.
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root-password
+          MYSQL_DATABASE: campusos
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci-root-password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply the schema
+        run: mysql -h 127.0.0.1 -uroot -pci-root-password < server/sql/schema.sql
+
+      - name: Typecheck, lint, test, build
+        run: npm run verify
+
+      - name: Seed the database
+        run: npm run seed
+        env:
+          DATABASE_URL: mysql://root:ci-root-password@127.0.0.1:3306/campusos
+          JWT_ACCESS_SECRET: ci-access-secret-not-used-anywhere-real
+          JWT_REFRESH_SECRET: ci-refresh-secret-not-used-anywhere-real
+          STAFF_INVITE_CODE: ci-invite-code
+
+      - name: Check for known vulnerabilities
+        run: npm audit --omit=dev --audit-level=high
