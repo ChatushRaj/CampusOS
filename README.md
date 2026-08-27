@@ -21,7 +21,6 @@
   <a href="SECURITY.md">Security</a>
 </p>
 
-
 <!-- Add screenshots here once deployed: dashboard, feed, notice board, placements. -->
 
 ## Quick start
